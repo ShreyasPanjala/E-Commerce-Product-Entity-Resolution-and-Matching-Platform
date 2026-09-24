@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Commerce Product Entity Resolution and Matching Platform</title>
+  <meta name="description" content="E-Commerce Product Entity Resolution and Matching Platform. Automatically consolidates duplicate electronic listings across sellers and compares live market prices in INR (₹).">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23003d29'><path d='M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z'/></svg>">
+</head>
+<body>
+
+  <!-- Top Announcement Bar (Cleaned without Phone Number) -->
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <div class="top-bar-promo">
+        <span>⚡ <strong>Live Platform:</strong> Save up to <strong>₹19,890</strong> across Verified Sellers | <strong>Real-Time Deduplication &amp; Price Intelligence</strong></span>
+      </div>
+
+      <div class="top-bar-utils">
+        <select aria-label="Language selection">
+          <option>English</option>
+          <option>Hindi</option>
+        </select>
+        <select aria-label="Currency selection">
+          <option selected>INR (₹)</option>
+          <option>USD ($)</option>
+          <option>EUR (€)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Navigation Header -->
+  <nav class="main-header">
+    <div class="header-inner">
+      <a href="#" class="brand-logo" aria-label="E-Commerce Product Entity Resolution and Matching Platform">
+        <div class="brand-logo-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.21 9l-4.38-6.56c-.19-.28-.51-.42-.83-.42-.32 0-.64.14-.83.43L6.79 9H2c-.55 0-1 .45-1 1 0 .09.01.18.04.27l2.54 9.27c.23.84 1 1.46 1.92 1.46h13c.92 0 1.69-.62 1.93-1.46l2.54-9.27L23 10c0-.55-.45-1-1-1h-4.79zM9 9l3-4.5L15 9H9zm3 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+          </svg>
+        </div>
+        <div class="brand-logo-text">
+          <span class="brand-logo-title">E-Commerce Product Entity Resolution and Matching Platform</span>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#storefront" class="active" onclick="switchTab('catalog')">Categories</a></li>
+        <li><a href="#deals" onclick="switchTab('matrix')">Deals &amp; Price Matrix</a></li>
+        <li><a href="#resolution" onclick="switchTab('duplicates')">Catalog Resolution</a></li>
+        <li><a href="#sandbox" onclick="switchTab('playground')">Live Matcher</a></li>
+      </ul>
+
+      <!-- Pill Search Bar -->
+      <div class="header-search">
+        <input type="text" id="mainSearchInput" placeholder="Search electronics, brands, or models..." aria-label="Search electronics" />
+        <button id="searchBtn" aria-label="Submit search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="header-actions">
+        <button class="icon-btn" aria-label="User Account">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span>Account</span>
+        </button>
+
+        <button class="icon-btn" aria-label="Wishlist" onclick="switchTab('catalog')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          <span class="badge-count" id="wishlistCountBadge">0</span>
+        </button>
+
+        <button class="cta-pill-btn" onclick="switchTab('duplicates')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+          <span>Resolution Engine</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <div class="hero-pill-tag">
+          <span class="pulse-dot"></span>
+          <span>Catalog Intelligence &amp; Multi-Seller Matching</span>
+        </div>
+        <h1 class="hero-title">
+          Grab the best deal on <span>Electronics</span> across all verified sellers.
+        </h1>
+        <p class="hero-description">
+          Our platform automatically detects duplicate listings from TechHub, iStore, MegaRetail, and 5 other major vendors. Compare prices, specifications, and buy at the lowest verified market price in Indian Rupee (INR).
+        </p>
+        <div class="hero-cta-group">
+          <button class="btn-primary-large" onclick="switchTab('catalog')">
+            <span>Explore Resolved Catalog</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+          <button class="btn-secondary-large" onclick="switchTab('matrix')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="9" y1="21" x2="9" y2="9"></line>
+            </svg>
+            <span>Compare Seller Matrix</span>
+          </button>
+        </div>
+
+        <div class="hero-trust-metrics">
+          <div class="trust-item">
+            <span class="trust-number" id="heroResolvedCount">25</span>
+            <span class="trust-label">Listings Processed</span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-number" id="heroSellersCount">8</span>
+            <span class="trust-label">Integrated Sellers</span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-number" id="heroTotalSavings">₹19,890</span>
+            <span class="trust-label">Potential Buyer Savings</span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-number">99.4%</span>
+            <span class="trust-label">Match Precision</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Visual with Shopcart Yellow Circular Pedestal -->
+      <div class="hero-visual">
+        <div class="hero-yellow-platform"></div>
+        <img class="hero-product-img" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=700&auto=format&fit=crop&q=80" alt="Sony WH-1000XM5 Wireless Headphones Showcase" />
+        
+        <!-- Floating UI Metric Cards -->
+        <div class="hero-floating-card floating-card-1">
+          <div class="floating-icon savings">💰</div>
+          <div class="floating-text">
+            <div class="label">Best Price Found</div>
+            <div class="value">₹28,950 (Save ₹1,049)</div>
+          </div>
+        </div>
+
+        <div class="hero-floating-card floating-card-2">
+          <div class="floating-icon vendors">✓</div>
+          <div class="floating-text">
+            <div class="label">Matched Entities</div>
+            <div class="value">3 Sellers Grouped</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Navigation View Switcher (Core Feature) -->
+  <section class="view-tabs-container">
+    <div class="view-tabs-inner">
+      <div class="view-tabs" role="tablist">
+        <button class="tab-btn active" data-tab="catalog" role="tab">
+          <span>🛍️ Storefront Catalog</span>
+          <span class="tab-count">11</span>
+        </button>
+        <button class="tab-btn" data-tab="duplicates" role="tab">
+          <span>🔍 Duplicate Resolution Groups</span>
+          <span class="tab-count">25</span>
+        </button>
+        <button class="tab-btn" data-tab="matrix" role="tab">
+          <span>📊 Price Comparison Matrix</span>
+        </button>
+        <button class="tab-btn" data-tab="playground" role="tab">
+          <span>⚡ Live Matcher Sandbox</span>
+        </button>
+      </div>
+
+      <div class="catalog-stats-pill">
+        <span>Catalog Health: <strong>100% De-duplicated</strong></span>
+        <span>•</span>
+        <span>Currency: <strong>INR (₹)</strong></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category Pills Row -->
+  <section class="categories-filter-section">
+    <div class="category-pills-row">
+      <button class="category-pill active" data-category="All">All Electronics</button>
+      <button class="category-pill" data-category="Smartphones">📱 Smartphones</button>
+      <button class="category-pill" data-category="Audio">🎧 Audio &amp; Headphones</button>
+      <button class="category-pill" data-category="Laptops">💻 Laptops &amp; PCs</button>
+      <button class="category-pill" data-category="Tablets">📲 Tablets &amp; iPads</button>
+      <button class="category-pill" data-category="Monitors">🖥️ Gaming Monitors</button>
+      <button class="category-pill" data-category="Gaming">🎮 Gaming Consoles</button>
+      <button class="category-pill" data-category="Accessories">🖱️ Accessories</button>
+    </div>
+  </section>
+
+  <!-- Toolbar: Brand Filters & Sorting -->
+  <section class="toolbar-section">
+    <div class="toolbar-left">
+      <select class="brand-select" id="brandSelect" aria-label="Filter by brand">
+        <option value="All">All Brands</option>
+        <option value="Apple">Apple</option>
+        <option value="Samsung">Samsung</option>
+        <option value="Sony">Sony</option>
+        <option value="Dell">Dell</option>
+        <option value="Bose">Bose</option>
+        <option value="Logitech">Logitech</option>
+        <option value="ASUS">ASUS</option>
+        <option value="Google">Google</option>
+      </select>
+
+      <select class="sort-select" id="sortSelect" aria-label="Sort products">
+        <option value="featured">Sort by: Featured</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+        <option value="savings-high">Highest Potential Savings</option>
+        <option value="sellers-high">Most Seller Offers</option>
+      </select>
+    </div>
+
+    <div class="results-count-text" id="resultsCountText">
+      Showing <strong>11</strong> resolved electronics
+    </div>
+  </section>
+
+  <!-- Views Panes Container -->
+  <main class="view-content-wrapper">
+
+    <!-- View 1: Modern Storefront Product Grid -->
+    <div class="view-pane active" id="catalogViewPane">
+      <div class="product-grid" id="productCatalogGrid">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </div>
+
+    <!-- View 2: Duplicate Resolution Groups & Entity Clusters -->
+    <div class="view-pane" id="duplicatesViewPane">
+      <div class="duplicates-container">
+        <div class="resolution-summary-bar">
+          <div class="res-summary-info">
+            <h3>Canonical Catalog &amp; Duplicate Resolution Hierarchy</h3>
+            <p>Our entity resolution engine normalized, tokenized, and grouped 25 raw marketplace listings into 11 canonical electronics products.</p>
+          </div>
+          <div class="res-summary-stats">
+            <div class="res-stat-box">
+              <div class="num">25</div>
+              <div class="txt">Raw Ingested Listings</div>
+            </div>
+            <div class="res-stat-box">
+              <div class="num">14</div>
+              <div class="txt">Duplicates Grouped</div>
+            </div>
+            <div class="res-stat-box">
+              <div class="num">11</div>
+              <div class="txt">Unified Products</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="duplicatesGroupList" style="display: flex; flex-direction: column; gap: 20px;">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- View 3: Live Price Comparison Matrix -->
+    <div class="view-pane" id="matrixViewPane">
+      <div class="matrix-container">
+        <div class="matrix-toolbar">
+          <div>
+            <h3>Multi-Seller Price Comparison Matrix</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Direct price spread and verified cheapest seller for every canonical device in INR (₹).</p>
+          </div>
+          <span class="card-tag" style="background:#003d29; color:#fff;">Live Price Sync Active</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="price-matrix-table">
+            <thead>
+              <tr>
+                <th>Product &amp; Category</th>
+                <th>Best Market Price</th>
+                <th>Cheapest Seller</th>
+                <th>Highest Listing</th>
+                <th>Maximum Savings</th>
+                <th>All Seller Offerings</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="matrixTableBody">
+              <!-- Rendered dynamically by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- View 4: Live Resolution Playground / Interactive Matcher Sandbox -->
+    <div class="view-pane" id="playgroundViewPane">
+      <div class="playground-container">
+        <div class="playground-card">
+          <h3>Interactive Entity Matcher Playground</h3>
+          <p class="subtitle">Test how our algorithms analyze two listing titles in real-time using Token Jaccard, Wagner-Fischer Edit Distance, and Substring Search.</p>
+
+          <div class="preset-selector-row">
+            <label for="sandboxPresetSelect">Load Sample Listing Pair:</label>
+            <select id="sandboxPresetSelect" class="preset-select"></select>
+          </div>
+
+          <div class="input-pair-group">
+            <div class="input-box">
+              <label for="sandboxStr1">Listing Title A (e.g., from Seller 1):</label>
+              <textarea id="sandboxStr1"></textarea>
+            </div>
+            <div class="input-box">
+              <label for="sandboxStr2">Listing Title B (e.g., from Seller 2):</label>
+              <textarea id="sandboxStr2"></textarea>
+            </div>
+          </div>
+
+          <button class="btn-run-match" id="btnRunSandboxMatch">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span>Run Instant Entity Resolution</span>
+          </button>
+        </div>
+
+        <div class="playground-card">
+          <div class="sandbox-result-box">
+            <div class="score-meter-header">
+              <div class="overall-score-circle">
+                <span class="score-num" id="sandboxCompositeScore">95%</span>
+                <span class="score-lbl">Confidence</span>
+              </div>
+              <div id="sandboxVerdictBadge" class="verdict-badge verdict-match">
+                MATCH DETECTED: RESOLVED TO SAME PRODUCT
+              </div>
+            </div>
+
+            <div class="algorithm-breakdown-list">
+              <div class="algo-stat-item">
+                <div class="algo-stat-top">
+                  <span>Token Overlap (Jaccard Index)</span>
+                  <span id="sandboxValToken" style="color:var(--primary-green);">90%</span>
+                </div>
+                <div class="algo-stat-desc">Analyzes token set intersection and union after normalisation.</div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill" id="sandboxBarToken" style="width: 90%;"></div>
+                </div>
+              </div>
+
+              <div class="algo-stat-item">
+                <div class="algo-stat-top">
+                  <span>Edit Similarity (Wagner-Fischer DP)</span>
+                  <span id="sandboxValEdit" style="color:var(--primary-green);">88%</span>
+                </div>
+                <div class="algo-stat-desc">Character-level minimum edit distance for typos and spelling variants.</div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill" id="sandboxBarEdit" style="width: 88%;"></div>
+                </div>
+              </div>
+
+              <div class="algo-stat-item">
+                <div class="algo-stat-top">
+                  <span>Substring &amp; Acronym Match</span>
+                  <span id="sandboxValSub" style="color:var(--primary-green);">100%</span>
+                </div>
+                <div class="algo-stat-desc">Detects core model numbers and brand prefix substrings.</div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill" id="sandboxBarSub" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Promotional Banners Section -->
+  <section class="promo-banners-section">
+    <div class="promo-card card-sand">
+      <div>
+        <div class="promo-discount-num">₹4,901</div>
+        <h3 class="promo-title">Max Seller Price Variance</h3>
+        <p class="promo-desc">Consumers routinely overpay when buying from single retailers. Compare 8 vendors instantly across India.</p>
+      </div>
+      <a href="#matrix" class="promo-link" onclick="switchTab('matrix')">
+        <span>View Price Spread Matrix</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </a>
+    </div>
+
+    <div class="promo-card card-pink">
+      <div>
+        <div class="promo-discount-num">100%</div>
+        <h3 class="promo-title">Verified Authorised Sellers</h3>
+        <p class="promo-desc">Every seller is vetted for genuine manufacturer warranties, return policies, and fast delivery.</p>
+      </div>
+      <a href="#catalog" class="promo-link" onclick="switchTab('catalog')">
+        <span>Browse Trusted Vendors</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </a>
+    </div>
+
+    <div class="promo-card card-mint">
+      <div>
+        <div class="promo-discount-num">0%</div>
+        <h3 class="promo-title">Catalog Clutter &amp; Duplicates</h3>
+        <p class="promo-desc">Clean canonical catalogs mean customers find the exact device specs without seeing 10 redundant rows.</p>
+      </div>
+      <a href="#duplicates" class="promo-link" onclick="switchTab('duplicates')">
+        <span>Explore Grouping Logic</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Seller Comparison Modal / Drawer -->
+  <div class="modal-overlay" id="sellerModalOverlay" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <img id="modalProductImg" src="" alt="Selected Product" />
+          <div>
+            <h3 id="modalProductTitle">Product Title</h3>
+            <p id="modalProductSubtitle">Specifications &amp; Brand</p>
+          </div>
+        </div>
+        <button class="btn-close-modal" id="modalCloseBtn" aria-label="Close dialog">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <h4 style="font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Verified Seller Offers</h4>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Sorted by lowest price in INR (₹). All items are in-stock with guaranteed delivery.</p>
+
+        <div class="seller-comparison-list" id="modalSellerList">
+          <!-- Populated by app.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h4>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.21 9l-4.38-6.56c-.19-.28-.51-.42-.83-.42-.32 0-.64.14-.83.43L6.79 9H2c-.55 0-1 .45-1 1 0 .09.01.18.04.27l2.54 9.27c.23.84 1 1.46 1.92 1.46h13c.92 0 1.69-.62 1.93-1.46l2.54-9.27L23 10c0-.55-.45-1-1-1h-4.79zM9 9l3-4.5L15 9H9zm3 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+          </svg>
+          E-Commerce Product Entity Resolution and Matching Platform
+        </h4>
+        <p>The unified electronics marketplace platform powered by automated entity resolution, deduplication, and real-time seller price matching in Indian Rupee (INR).</p>
+      </div>
+
+      <div class="footer-column">
+        <h5>Electronics Categories</h5>
+        <ul>
+          <li><a href="#" onclick="switchTab('catalog')">Smartphones &amp; 5G</a></li>
+          <li><a href="#" onclick="switchTab('catalog')">Wireless Audio &amp; ANC</a></li>
+          <li><a href="#" onclick="switchTab('catalog')">Laptops &amp; Ultrabooks</a></li>
+          <li><a href="#" onclick="switchTab('catalog')">Gaming Consoles &amp; VR</a></li>
+          <li><a href="#" onclick="switchTab('catalog')">4K Gaming Displays</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h5>Resolution Features</h5>
+        <ul>
+          <li><a href="#" onclick="switchTab('duplicates')">Catalog Deduplication</a></li>
+          <li><a href="#" onclick="switchTab('matrix')">Multi-Seller Price Matrix</a></li>
+          <li><a href="#" onclick="switchTab('playground')">String Matching Sandbox</a></li>
+          <li><a href="#" onclick="switchTab('catalog')">Verified Vendor Index</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h5>Integrated Vendors</h5>
+        <ul>
+          <li><a href="#">TechHub Premier</a></li>
+          <li><a href="#">iStore Official</a></li>
+          <li><a href="#">MegaRetail India</a></li>
+          <li><a href="#">GalaxyStore Direct</a></li>
+          <li><a href="#">AudioWorld Specialists</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>© 2026 E-Commerce Product Entity Resolution and Matching Platform. All rights reserved.</div>
+      <div>E-Commerce Product Entity Resolution and Matching Platform • Multi-Seller Price Intelligence</div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
