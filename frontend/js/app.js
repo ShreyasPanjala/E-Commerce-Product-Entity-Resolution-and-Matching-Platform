@@ -1,7 +1,6 @@
 /**
- * E-Commerce Product Entity Resolution and Matching Platform - Interactive Application Logic
- * Implements real-time filtering, multi-seller resolution views,
- * INR price comparison matrix, and live string-matching algorithms.
+ * RESOLV • Product Entity Resolution & Price Intelligence
+ * Minimalist, high-performance application logic.
  */
 
 // Application State
@@ -10,12 +9,10 @@ const state = {
   activeCategory: 'All',
   activeBrand: 'All',
   searchQuery: '',
-  sortBy: 'featured',
-  wishlist: new Set(),
-  compareList: new Set()
+  sortBy: 'featured'
 };
 
-// DOM References
+// DOM Cache
 let dom = {};
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -28,33 +25,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initDomReferences() {
   dom = {
-    // Nav tabs
+    // Navigation
     tabBtns: document.querySelectorAll('.tab-btn'),
     viewPanes: document.querySelectorAll('.view-pane'),
-    // Filters & Search
+
+    // Controls
     categoryPills: document.querySelectorAll('.category-pill'),
     brandSelect: document.getElementById('brandSelect'),
     sortSelect: document.getElementById('sortSelect'),
     searchInput: document.getElementById('mainSearchInput'),
-    searchBtn: document.getElementById('searchBtn'),
     resultsCount: document.getElementById('resultsCountText'),
-    // Views containers
+
+    // View Containers
     catalogGrid: document.getElementById('productCatalogGrid'),
     duplicatesList: document.getElementById('duplicatesGroupList'),
     matrixTableBody: document.getElementById('matrixTableBody'),
-    // Stats
+
+    // Metrics Display
     totalSavingsDisplay: document.getElementById('heroTotalSavings'),
     resolvedCountDisplay: document.getElementById('heroResolvedCount'),
     sellersCountDisplay: document.getElementById('heroSellersCount'),
+    canonicalCountDisplay: document.getElementById('heroCanonicalCount'),
+
     // Modal
     modalOverlay: document.getElementById('sellerModalOverlay'),
     modalCloseBtn: document.getElementById('modalCloseBtn'),
     modalProductImg: document.getElementById('modalProductImg'),
     modalProductTitle: document.getElementById('modalProductTitle'),
     modalProductSubtitle: document.getElementById('modalProductSubtitle'),
-    modalSellerList: document.getElementById('modalSellerList'),
-    // Badges
-    wishlistCountBadge: document.getElementById('wishlistCountBadge')
+    modalSellerList: document.getElementById('modalSellerList')
   };
 }
 
@@ -111,7 +110,7 @@ function initEventListeners() {
     });
   }
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && dom.modalOverlay.classList.contains('open')) {
+    if (e.key === 'Escape' && dom.modalOverlay && dom.modalOverlay.classList.contains('open')) {
       closeModal();
     }
   });
@@ -120,7 +119,9 @@ function initEventListeners() {
 function switchTab(tabName) {
   state.currentTab = tabName;
   dom.tabBtns.forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('data-tab') === tabName);
+    const isTarget = btn.getAttribute('data-tab') === tabName;
+    btn.classList.toggle('active', isTarget);
+    btn.setAttribute('aria-selected', isTarget ? 'true' : 'false');
   });
   dom.viewPanes.forEach(pane => {
     pane.classList.toggle('active', pane.id === `${tabName}ViewPane`);
@@ -133,25 +134,29 @@ function updateMetricsDisplay() {
   if (dom.totalSavingsDisplay) dom.totalSavingsDisplay.textContent = formatINR(metrics.totalPotentialSavings);
   if (dom.resolvedCountDisplay) dom.resolvedCountDisplay.textContent = metrics.totalListings;
   if (dom.sellersCountDisplay) dom.sellersCountDisplay.textContent = metrics.sellersCount;
+  if (dom.canonicalCountDisplay) dom.canonicalCountDisplay.textContent = metrics.canonicalCount;
 }
 
 // Filter and Sort Data
 function getFilteredCanonicalProducts() {
   return CANONICAL_CATALOG.filter(item => {
-    // Category match
     const categoryMatch = (state.activeCategory === 'All') || (item.category === state.activeCategory);
-    // Brand match
     const brandMatch = (state.activeBrand === 'All') || (item.brand === state.activeBrand);
-    // Search query match (in canonical name, subtitle, brand, or raw listing titles)
+    
     let searchMatch = true;
     if (state.searchQuery) {
       const q = state.searchQuery;
       const listings = item.listings.map(lid => RAW_LISTINGS.find(l => l.listingId === lid));
-      const hasListingMatch = listings.some(l => l.title.toLowerCase().includes(q) || l.sellerName.toLowerCase().includes(q));
+      const hasListingMatch = listings.some(l => 
+        l.title.toLowerCase().includes(q) || 
+        l.sellerName.toLowerCase().includes(q) ||
+        l.listingId.toLowerCase().includes(q)
+      );
       searchMatch = item.canonicalName.toLowerCase().includes(q) ||
-                          item.subtitle.toLowerCase().includes(q) ||
-                          item.brand.toLowerCase().includes(q) ||
-                          hasListingMatch;
+                    item.subtitle.toLowerCase().includes(q) ||
+                    item.brand.toLowerCase().includes(q) ||
+                    item.category.toLowerCase().includes(q) ||
+                    hasListingMatch;
     }
     return categoryMatch && brandMatch && searchMatch;
   }).sort((a, b) => {
@@ -178,7 +183,7 @@ function getFilteredCanonicalProducts() {
 function renderCurrentView() {
   const items = getFilteredCanonicalProducts();
   if (dom.resultsCount) {
-    dom.resultsCount.innerHTML = `Showing <strong>${items.length}</strong> resolved electronics (${state.activeCategory})`;
+    dom.resultsCount.textContent = `${items.length} ${items.length === 1 ? 'device' : 'devices'}`;
   }
 
   if (state.currentTab === 'catalog') {
@@ -191,16 +196,20 @@ function renderCurrentView() {
 }
 
 // -------------------------------------------------------------
-// View 1: Render Storefront Product Grid
+// View 1: Minimalist Storefront Catalog Grid
 // -------------------------------------------------------------
 function renderStorefrontCatalog(items) {
   if (!dom.catalogGrid) return;
 
   if (items.length === 0) {
     dom.catalogGrid.innerHTML = `
-      <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
-        <h3 style="font-size: 20px; color: var(--text-primary); margin-bottom: 8px;">No matching electronics found</h3>
-        <p style="color: var(--text-muted); font-size: 14px;">Try searching for "iPhone", "Sony", "Laptop", or clear filters.</p>
+      <div class="empty-state">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <h3>No matching electronics found</h3>
+        <p>Try searching for a brand like "Apple", "Sony", or reset category filters.</p>
       </div>
     `;
     return;
@@ -216,105 +225,111 @@ function renderStorefrontCatalog(items) {
 
     const formattedPrice = formatINR(minPrice);
     const formattedSavings = formatINR(savings);
-    const isWishlisted = state.wishlist.has(item.id);
 
     return `
-      <div class="product-card" data-id="${item.id}">
-        <div class="card-top-badges">
-          <span class="card-tag ${rawOffers.length > 1 ? 'seller-count' : ''}">${rawOffers.length > 1 ? `${rawOffers.length} Verified Sellers` : item.badge}</span>
-          <button class="btn-wishlist ${isWishlisted ? 'active' : ''}" onclick="toggleWishlist('${item.id}', event)" title="Save to wishlist">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="${isWishlisted ? '#e11d48' : 'none'}" stroke="${isWishlisted ? '#e11d48' : 'currentColor'}" stroke-width="2">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-            </svg>
-          </button>
-        </div>
-
-        <div class="product-media-container" onclick="openSellerModal('${item.id}')">
+      <article class="product-card" onclick="openSellerModal('${item.id}')" tabindex="0" role="button" aria-label="View offers for ${item.canonicalName}">
+        <div class="card-media">
           <img src="${item.image}" alt="${item.canonicalName}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=600&auto=format&fit=crop&q=80'" />
+          <div class="card-media-tags">
+            <span class="pill-sellers">${rawOffers.length} ${rawOffers.length === 1 ? 'Seller' : 'Sellers'}</span>
+            ${hasSavings ? `<span class="pill-savings">Save ${formattedSavings}</span>` : ''}
+          </div>
         </div>
 
-        <div class="product-info">
-          <div class="product-header-row">
-            <h4 class="product-title" onclick="openSellerModal('${item.id}')" style="cursor:pointer;">${item.canonicalName}</h4>
-            <div class="product-price">${formattedPrice}</div>
+        <div class="card-body">
+          <div class="card-category-brand">${item.brand} • ${item.category}</div>
+          <h3 class="card-title">${item.canonicalName}</h3>
+          <p class="card-specs">${item.highlightSpecs}</p>
+          
+          <div class="card-footer">
+            <div class="card-price-group">
+              <span class="price-prefix">Lowest</span>
+              <span class="price-amount">${formattedPrice}</span>
+            </div>
+            <button class="btn-compare" onclick="openSellerModal('${item.id}'); event.stopPropagation();">
+              <span>Compare</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
           </div>
-
-          <p class="product-subtitle">${item.subtitle}</p>
-
-          <div class="product-specs-pill">${item.highlightSpecs}</div>
-
-          <div class="product-rating-row">
-            <div class="rating-stars">★★★★★</div>
-            <span class="rating-count">(${item.reviewCount})</span>
-            ${hasSavings ? `<span class="price-variance-badge">Save up to ${formattedSavings}</span>` : ''}
-          </div>
-
-          <button class="card-action-btn" onclick="openSellerModal('${item.id}')">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M16 11V7a4 4 0 0 0-8 0v4M5 9h14l1 12H4L5 9z"></path>
-            </svg>
-            Compare ${rawOffers.length} Seller Offers
-          </button>
         </div>
-      </div>
+      </article>
     `;
   }).join('');
 }
 
 // -------------------------------------------------------------
-// View 2: Render Duplicate Resolution Groups
+// View 2: Duplicate Resolution Clusters
 // -------------------------------------------------------------
 function renderDuplicateGroups(items) {
   if (!dom.duplicatesList) return;
+
+  if (items.length === 0) {
+    dom.duplicatesList.innerHTML = `
+      <div class="empty-state">
+        <h3>No matching clusters found</h3>
+        <p>Adjust your search filters above.</p>
+      </div>
+    `;
+    return;
+  }
 
   dom.duplicatesList.innerHTML = items.map(item => {
     const rawOffers = item.listings.map(id => RAW_LISTINGS.find(l => l.listingId === id));
     const minPrice = Math.min(...rawOffers.map(l => l.price));
 
     return `
-      <div class="canonical-group-card">
-        <div class="group-card-header">
-          <div class="group-title-block">
-            <img class="group-thumbnail" src="${item.image}" alt="${item.canonicalName}" />
+      <div class="cluster-card">
+        <div class="cluster-head">
+          <div class="cluster-summary">
+            <img class="cluster-thumb" src="${item.image}" alt="${item.canonicalName}" />
             <div>
-              <span class="brand-tag">${item.brand} • ${item.category}</span>
-              <h4>${item.canonicalName}</h4>
+              <div class="cluster-brand">${item.brand} • ${item.category}</div>
+              <h3 class="cluster-name">${item.canonicalName}</h3>
+              <p class="cluster-subtitle">${item.highlightSpecs}</p>
             </div>
           </div>
-          <div class="group-badge-meta">
-            <span class="confidence-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-              ${rawOffers.length > 1 ? `${rawOffers.length} Listings Merged` : 'Single Listing Catalogued'}
-            </span>
-            <button class="cta-pill-btn" onclick="openSellerModal('${item.id}')" style="padding: 6px 16px; font-size: 13px;">View Price Delta</button>
+          <div class="cluster-actions">
+            <span class="cluster-count-badge">${rawOffers.length} Raw Listings Merged</span>
+            <button class="btn-action-small" onclick="openSellerModal('${item.id}')">
+              Compare Prices
+            </button>
           </div>
         </div>
 
-        <div class="raw-listings-list">
-          ${rawOffers.map(listing => {
-            const isCheapest = listing.price === minPrice;
-            const seller = SELLERS[listing.sellerId];
-            return `
-              <div class="raw-listing-row ${isCheapest ? 'cheapest-row' : ''}">
-                <span class="raw-listing-id">${listing.listingId}</span>
-                <span class="raw-seller-name">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                  </svg>
-                  ${listing.sellerName}
-                </span>
-                <span class="raw-title-diff" title="${listing.description}">
-                  "${listing.title}"
-                </span>
-                <span class="raw-price">${formatINR(listing.price)}</span>
-                <span class="raw-tag-badge ${isCheapest ? 'tag-best-deal' : 'tag-match'}">
-                  ${isCheapest ? '★ Lowest' : 'Matched'}
-                </span>
-              </div>
-            `;
-          }).join('')}
+        <div class="cluster-table-wrap">
+          <table class="cluster-table">
+            <thead>
+              <tr>
+                <th style="width: 100px;">Listing ID</th>
+                <th style="width: 160px;">Seller</th>
+                <th>Raw Scraped Marketplace Title</th>
+                <th style="width: 130px;">Price (INR)</th>
+                <th style="width: 120px; text-align: right;">Resolution</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rawOffers.map(listing => {
+                const isCheapest = listing.price === minPrice;
+                return `
+                  <tr class="${isCheapest ? 'row-best-price' : ''}">
+                    <td><span class="code-id">${listing.listingId}</span></td>
+                    <td><span class="seller-name">${listing.sellerName}</span></td>
+                    <td class="raw-title-cell" title="${listing.description}">
+                      "${listing.title}"
+                    </td>
+                    <td><strong>${formatINR(listing.price)}</strong></td>
+                    <td style="text-align: right;">
+                      <span class="badge-status ${isCheapest ? 'status-best' : 'status-merged'}">
+                        ${isCheapest ? 'Lowest Price' : 'Matched'}
+                      </span>
+                    </td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
         </div>
       </div>
     `;
@@ -322,10 +337,21 @@ function renderDuplicateGroups(items) {
 }
 
 // -------------------------------------------------------------
-// View 3: Render Price Comparison Matrix Table
+// View 3: Price Comparison Matrix Table
 // -------------------------------------------------------------
 function renderPriceMatrix(items) {
   if (!dom.matrixTableBody) return;
+
+  if (items.length === 0) {
+    dom.matrixTableBody.innerHTML = `
+      <tr>
+        <td colspan="7" style="text-align: center; padding: 48px 20px; color: var(--text-muted);">
+          No electronics found matching your filters.
+        </td>
+      </tr>
+    `;
+    return;
+  }
 
   dom.matrixTableBody.innerHTML = items.map(item => {
     const rawOffers = item.listings.map(id => RAW_LISTINGS.find(l => l.listingId === id));
@@ -342,36 +368,33 @@ function renderPriceMatrix(items) {
             <img src="${item.image}" alt="${item.canonicalName}" />
             <div>
               <div class="matrix-prod-name">${item.canonicalName}</div>
-              <div class="matrix-prod-cat">${item.brand} • ${item.category}</div>
+              <div class="matrix-prod-meta">${item.brand} • ${item.category}</div>
             </div>
           </div>
         </td>
         <td>
-          <span class="matrix-price-cell cheapest">
-            ${formatINR(minPrice)}
-          </span>
+          <span class="price-highlight">${formatINR(minPrice)}</span>
         </td>
         <td>
-          <strong>${cheapestListing.sellerName}</strong>
-          <div style="font-size:11px; color:var(--text-muted);">${SELLERS[cheapestListing.sellerId]?.shipping || 'Verified'}</div>
+          <span class="seller-pill">${cheapestListing.sellerName}</span>
         </td>
         <td>
-          <span class="matrix-price-cell">${formatINR(maxPrice)}</span>
+          <span class="price-regular">${formatINR(maxPrice)}</span>
         </td>
         <td>
-          <span class="matrix-savings-cell">${savings > 0 ? `+${formatINR(savings)}` : '—'}</span>
+          <span class="savings-pill">${savings > 0 ? `+${formatINR(savings)}` : '—'}</span>
         </td>
         <td>
-          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <div class="seller-chips-wrap">
             ${rawOffers.map(l => `
-              <span style="font-size:11px; background:#f3f4f6; padding:3px 8px; border-radius:4px;">
-                ${l.sellerName}: <strong>${formatINR(l.price)}</strong>
+              <span class="seller-chip ${l.price === minPrice ? 'seller-chip-cheapest' : ''}">
+                ${l.sellerName}: ${formatINR(l.price)}
               </span>
             `).join('')}
           </div>
         </td>
-        <td>
-          <button class="cta-pill-btn" onclick="openSellerModal('${item.id}')" style="padding: 6px 14px; font-size: 12px;">Compare</button>
+        <td style="text-align: right;">
+          <button class="btn-action-small" onclick="openSellerModal('${item.id}')">Offers</button>
         </td>
       </tr>
     `;
@@ -393,26 +416,26 @@ function openSellerModal(canonicalId) {
   dom.modalProductTitle.textContent = item.canonicalName;
   dom.modalProductSubtitle.textContent = `${item.brand} • ${item.category} • ${item.highlightSpecs}`;
 
-  dom.modalSellerList.innerHTML = rawOffers.map((listing, index) => {
+  dom.modalSellerList.innerHTML = rawOffers.map((listing) => {
     const isCheapest = listing.price === minPrice;
     const seller = SELLERS[listing.sellerId] || { rating: 4.8, reviews: 1000, shipping: "Standard Delivery" };
     return `
-      <div class="seller-offer-row ${isCheapest ? 'best-price' : ''}">
-        <div class="offer-seller-info">
+      <div class="seller-offer-card ${isCheapest ? 'best-offer' : ''}">
+        <div class="offer-details">
           <div class="offer-seller-title">
-            ${listing.sellerName}
-            ${isCheapest ? '<span class="card-tag" style="background:#003d29; color:#fff;">Best Price Deal</span>' : ''}
+            <span class="offer-seller-name">${listing.sellerName}</span>
+            ${isCheapest ? '<span class="best-deal-badge">Cheapest Verified Offer</span>' : ''}
           </div>
-          <div class="offer-seller-meta">
-            ★ ${seller.rating} (${seller.reviews} reviews) • <span style="color:#059669;">${seller.shipping}</span>
+          <div class="offer-meta">
+            ★ ${seller.rating} (${seller.reviews} reviews) • <span class="shipping-tag">${seller.shipping}</span>
           </div>
-          <div class="offer-listing-title">Listing Title: "${listing.title}"</div>
+          <div class="offer-raw-title">Scraped Title: "${listing.title}"</div>
         </div>
 
-        <div class="offer-price-action">
-          <div class="offer-price">${formatINR(listing.price)}</div>
-          <button class="btn-buy-seller" onclick="showPurchaseFeedback('${listing.sellerName}', ${listing.price})">
-            Select Seller
+        <div class="offer-action-group">
+          <div class="offer-price-tag">${formatINR(listing.price)}</div>
+          <button class="btn-select-seller" onclick="showPurchaseFeedback('${listing.sellerName}', ${listing.price})">
+            Select Offer
           </button>
         </div>
       </div>
@@ -431,34 +454,38 @@ function closeModal() {
 }
 
 function showPurchaseFeedback(sellerName, price) {
-  alert(`Great choice! Redirecting to verified checkout with ${sellerName} at the best price of ${formatINR(price)}.`);
   closeModal();
+  showToast(`Redirecting to verified checkout with ${sellerName} at ${formatINR(price)}`);
 }
 
-function toggleWishlist(canonicalId, event) {
-  if (event) event.stopPropagation();
-  if (state.wishlist.has(canonicalId)) {
-    state.wishlist.delete(canonicalId);
-  } else {
-    state.wishlist.add(canonicalId);
+// Sophisticated Toast Notification
+function showToast(message) {
+  let toast = document.getElementById('appToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'appToast';
+    toast.className = 'app-toast';
+    document.body.appendChild(toast);
   }
-  if (dom.wishlistCountBadge) {
-    dom.wishlistCountBadge.textContent = state.wishlist.size;
-  }
-  renderCurrentView();
+  toast.textContent = message;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3200);
 }
 
 // -------------------------------------------------------------
-// View 4: Live Resolution Playground / Sandbox Logic
+// View 4: Live Resolution Playground / Matcher Sandbox
 // -------------------------------------------------------------
 const PRESETS = [
   {
-    name: "iPhone 15 Variation (High Match)",
+    name: "Apple iPhone 15 Variation (High Match)",
     s1: "Apple iPhone 15 128GB Black",
     s2: "iPhone 15 Apple 128 GB - Midnight Black"
   },
   {
-    name: "Sony ANC Headphones (Different Seller Format)",
+    name: "Sony ANC Headphones (Format Shift)",
     s1: "Sony WH-1000XM5 Wireless Headphones",
     s2: "Sony WH1000XM5/B Wireless Over-Ear Headphone Active Noise Cancelling"
   },
@@ -468,7 +495,7 @@ const PRESETS = [
     s2: "Galaxy S24 Samsung 256 GB Smartphone 5G"
   },
   {
-    name: "Completely Different Electronics (No Match)",
+    name: "Distinct Electronics (No Match)",
     s1: "Apple MacBook Pro 16-inch M3 Max 36GB 1TB",
     s2: "Sony PlayStation 5 PS5 Slim Console Digital Edition 1TB"
   }
@@ -482,12 +509,10 @@ function initSandbox() {
 
   if (!presetSelect || !str1 || !str2 || !runBtn) return;
 
-  // Populate presets
   presetSelect.innerHTML = PRESETS.map((p, idx) => `
     <option value="${idx}">${p.name}</option>
   `).join('');
 
-  // Handle preset change
   presetSelect.addEventListener('change', (e) => {
     const p = PRESETS[e.target.value];
     str1.value = p.s1;
@@ -495,7 +520,6 @@ function initSandbox() {
     runSandboxMatch();
   });
 
-  // Default initial values
   str1.value = PRESETS[0].s1;
   str2.value = PRESETS[0].s2;
 
@@ -503,7 +527,6 @@ function initSandbox() {
   runSandboxMatch();
 }
 
-// Core String Matching Algorithms for Sandbox
 function computeLevenshtein(a, b) {
   const matrix = [];
   for (let i = 0; i <= b.length; i++) {
@@ -518,9 +541,9 @@ function computeLevenshtein(a, b) {
         matrix[i][j] = matrix[i - 1][j - 1];
       } else {
         matrix[i][j] = Math.min(
-          matrix[i - 1][j - 1] + 1, // substitution
-          matrix[i][j - 1] + 1,     // insertion
-          matrix[i - 1][j] + 1      // deletion
+          matrix[i - 1][j - 1] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j] + 1
         );
       }
     }
@@ -545,7 +568,6 @@ function computeSubstringMatch(s1, s2) {
   if (!s1Norm || !s2Norm) return 0;
   if (s1Norm.includes(s2Norm) || s2Norm.includes(s1Norm)) return 1.0;
 
-  // Substring overlap ratio
   let maxCommon = 0;
   for (let i = 0; i < s1Norm.length; i++) {
     for (let j = i + 3; j <= s1Norm.length; j++) {
@@ -559,8 +581,8 @@ function computeSubstringMatch(s1, s2) {
 }
 
 function runSandboxMatch() {
-  const s1 = document.getElementById('sandboxStr1').value.trim();
-  const s2 = document.getElementById('sandboxStr2').value.trim();
+  const s1 = (document.getElementById('sandboxStr1')?.value || '').trim();
+  const s2 = (document.getElementById('sandboxStr2')?.value || '').trim();
 
   const jaccardScore = computeTokenJaccard(s1, s2);
   const dist = computeLevenshtein(s1, s2);
@@ -568,11 +590,9 @@ function runSandboxMatch() {
   const editScore = maxLen === 0 ? 1 : Math.max(0, 1 - (dist / maxLen));
   const subScore = computeSubstringMatch(s1, s2);
 
-  // Weighted score (40% Token Overlap, 35% Edit Sim, 25% Substring)
   const compositeScore = Math.round((jaccardScore * 0.40 + editScore * 0.35 + subScore * 0.25) * 100);
   const isMatch = compositeScore >= 68;
 
-  // Update UI
   const scoreNum = document.getElementById('sandboxCompositeScore');
   const verdict = document.getElementById('sandboxVerdictBadge');
   const barToken = document.getElementById('sandboxBarToken');
@@ -585,11 +605,11 @@ function runSandboxMatch() {
   if (scoreNum) scoreNum.textContent = `${compositeScore}%`;
   if (verdict) {
     if (isMatch) {
-      verdict.className = 'verdict-badge verdict-match';
-      verdict.textContent = 'MATCH DETECTED: RESOLVED TO SAME PRODUCT';
+      verdict.className = 'verdict-pill verdict-match';
+      verdict.textContent = 'Match: Same Product Entity';
     } else {
-      verdict.className = 'verdict-badge verdict-nomatch';
-      verdict.textContent = 'DISTINCT ENTITIES: SEPARATE PRODUCTS';
+      verdict.className = 'verdict-pill verdict-nomatch';
+      verdict.textContent = 'Distinct: Different Products';
     }
   }
 
@@ -597,7 +617,7 @@ function runSandboxMatch() {
   if (valToken) valToken.textContent = `${Math.round(jaccardScore * 100)}%`;
 
   if (barEdit) barEdit.style.width = `${Math.round(editScore * 100)}%`;
-  if (valEdit) valEdit.textContent = `${Math.round(editScore * 100)}% (Distance: ${dist})`;
+  if (valEdit) valEdit.textContent = `${Math.round(editScore * 100)}% (Dist: ${dist})`;
 
   if (barSub) barSub.style.width = `${Math.round(subScore * 100)}%`;
   if (valSub) valSub.textContent = `${Math.round(subScore * 100)}%`;
