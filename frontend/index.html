@@ -3,861 +3,651 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ENTITY.RESOLVE — Product Entity Resolution & Price Intelligence</title>
-  <meta name="description" content="AI-powered e-commerce product entity resolution platform. Resolve fragmented listings into unified canonical product entities. Cross-seller price intelligence in INR.">
-  <meta name="keywords" content="entity resolution, product matching, price comparison, e-commerce, data intelligence, string matching, KMP, Rabin-Karp">
+  <title>ELECTRO.RESOLVE — E-Commerce Product Entity Resolution & Price Intelligence</title>
+  <meta name="description" content="Academic DSA-3 Capstone: Enterprise-grade Product Entity Resolution platform. Implements pure Java & interactive web algorithms for KMP, Rabin-Karp, Levenshtein DP, Suffix Array LCP, and Bipartite Graph Flow.">
+  <meta name="keywords" content="Entity Resolution, Product Matching, Knuth-Morris-Pratt, Rabin-Karp, Wagner-Fischer, Levenshtein Distance, Suffix Array, Bipartite Matching, Price Intelligence, INR">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238b5cf6'><circle cx='12' cy='12' r='4'/><path d='M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83'/></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236366f1'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
 </head>
 <body>
 
   <!-- ================================================================
-       NAVIGATION
+       TOP APP HEADER
        ================================================================ -->
-  <header class="app-header" id="app-header">
-    <div class="header-container">
-      <a href="#hero" class="brand-link">
-        <div class="brand-glyph">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="4"/>
-            <path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
+  <header class="app-header" id="appHeader">
+    <div class="header-inner">
+      <!-- Brand & Project Meta -->
+      <div class="header-brand-wrap">
+        <div class="brand-logo-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
           </svg>
         </div>
-        <div class="brand-info">
-          <span class="brand-name">ENTITY<span class="brand-dot">.</span>RESOLVE</span>
+        <div class="brand-titles">
+          <div class="brand-main-row">
+            <span class="brand-name">ELECTRO<span class="brand-dot">.</span>RESOLVE</span>
+            <span class="academic-badge">DSA-3 Capstone</span>
+          </div>
+          <span class="brand-tagline">Product Entity Resolution & Multi-Seller Price Intelligence</span>
         </div>
-      </a>
+      </div>
 
-      <nav class="main-nav" id="main-nav" role="navigation" aria-label="Primary navigation">
-        <a href="#overview" class="nav-link">Overview</a>
-        <a href="#catalog-section" class="nav-link" onclick="scrollToCatalog(); return false;">Catalog</a>
-        <a href="#resolution-section" class="nav-link">Resolution</a>
-        <a href="#price-section" class="nav-link">Pricing</a>
-        <a href="#algorithms-section" class="nav-link">Algorithms</a>
+      <!-- Navigation Mode Tabs -->
+      <nav class="nav-tabs-container" role="tablist" aria-label="Application Views">
+        <button class="nav-tab-btn active" data-tab="pipeline" role="tab" aria-selected="true" id="tabBtnPipeline">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <span>Pipeline Demo</span>
+        </button>
+
+        <button class="nav-tab-btn" data-tab="lab" role="tab" aria-selected="false" id="tabBtnLab">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31M14 2v7.31M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0"/></svg>
+          <span>Algorithm Lab</span>
+        </button>
+
+        <button class="nav-tab-btn" data-tab="sandbox" role="tab" aria-selected="false" id="tabBtnSandbox">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span>Title Matcher</span>
+        </button>
+
+        <button class="nav-tab-btn" data-tab="catalog" role="tab" aria-selected="false" id="tabBtnCatalog">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span>Storefront Catalog</span>
+        </button>
+
+        <button class="nav-tab-btn" data-tab="benchmarks" role="tab" aria-selected="false" id="tabBtnBenchmarks">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>Benchmarks</span>
+        </button>
       </nav>
 
-      <div class="header-right">
-        <!-- Search box (used by app.js) -->
-        <div class="search-box">
-          <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input type="text" id="mainSearchInput" placeholder="Search products, brands..." aria-label="Search catalog" autocomplete="off" />
-        </div>
-        <button class="btn-launch" onclick="scrollToCatalog()">Launch Matcher</button>
-        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation" aria-expanded="false">
-          <span></span><span></span><span></span>
+      <!-- Quick Action Controls -->
+      <div class="header-actions">
+        <button class="btn-header-cta" id="btnHeaderRunPipeline" title="Launch the 4-stage automated simulation">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Run Demo</span>
+        </button>
+        <button class="btn-header-ghost" id="btnHeaderExport" title="Export resolved catalog as JSON">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Export JSON</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Mobile Nav Drawer -->
-  <div class="mobile-nav" id="mobileNav" aria-hidden="true">
-    <a href="#overview" class="mobile-nav-link" onclick="closeMobileNav()">Overview</a>
-    <a href="#catalog-section" class="mobile-nav-link" onclick="scrollToCatalog(); closeMobileNav();">Catalog</a>
-    <a href="#resolution-section" class="mobile-nav-link" onclick="closeMobileNav()">Resolution</a>
-    <a href="#price-section" class="mobile-nav-link" onclick="closeMobileNav()">Pricing</a>
-    <a href="#algorithms-section" class="mobile-nav-link" onclick="closeMobileNav()">Algorithms</a>
-    <a href="#" class="mobile-nav-link mobile-cta" onclick="scrollToCatalog(); closeMobileNav();">Launch Matcher</a>
-  </div>
-  <div class="mobile-nav-backdrop" id="mobileNavBackdrop" onclick="closeMobileNav()"></div>
-
   <!-- ================================================================
-       HERO SECTION
+       GLOBAL METRICS BANNER
        ================================================================ -->
-  <section class="hero-section" id="hero">
-    <!-- Background particles canvas -->
-    <canvas class="hero-particles" id="heroParticles"></canvas>
-
-    <div class="hero-content">
-      <div class="hero-eyebrow reveal-up">
-        <span class="eyebrow-dot"></span>
-        Entity Resolution & Price Intelligence Platform
+  <section class="global-kpi-strip" aria-label="Live Catalog Metrics">
+    <div class="strip-inner">
+      <div class="kpi-cell">
+        <span class="kpi-num" id="statRawListings">25</span>
+        <span class="kpi-label">Raw Listings Ingested</span>
       </div>
-
-      <h1 class="hero-title reveal-up" style="animation-delay:0.1s">
-        ONE PRODUCT.<br>
-        <span class="hero-title-accent">MANY LISTINGS.</span>
-      </h1>
-
-      <p class="hero-subtitle reveal-up" style="animation-delay:0.2s">
-        Resolve fragmented e-commerce listings into unified product entities.
-      </p>
-      <p class="hero-desc reveal-up" style="animation-delay:0.25s">
-        Identify duplicate products across sellers, group them into canonical entities,<br class="hero-br"> and compare prices from a single intelligent catalog.
-      </p>
-
-      <div class="hero-actions reveal-up" style="animation-delay:0.35s">
-        <button class="btn-hero-primary" onclick="scrollToCatalog()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-          Explore Catalog
-        </button>
-        <button class="btn-hero-secondary" onclick="scrollToMatcher()">
-          Try Entity Matcher
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
+      <div class="kpi-divider"></div>
+      <div class="kpi-cell">
+        <span class="kpi-num cyan" id="statDuplicates">14</span>
+        <span class="kpi-label">Duplicates Unified</span>
       </div>
-
-      <!-- Key metrics strip -->
-      <div class="hero-metrics reveal-up" style="animation-delay:0.45s">
-        <div class="hero-metric">
-          <span class="hm-value" id="heroResolvedCount">25</span>
-          <span class="hm-label">Raw Listings</span>
-        </div>
-        <div class="hm-sep"></div>
-        <div class="hero-metric">
-          <span class="hm-value">14</span>
-          <span class="hm-label">Duplicates Merged</span>
-        </div>
-        <div class="hm-sep"></div>
-        <div class="hero-metric">
-          <span class="hm-value" id="heroCanonicalCount">11</span>
-          <span class="hm-label">Canonical Entities</span>
-        </div>
-        <div class="hm-sep"></div>
-        <div class="hero-metric">
-          <span class="hm-value" id="heroSellersCount">8</span>
-          <span class="hm-label">Verified Sellers</span>
-        </div>
-        <div class="hm-sep"></div>
-        <div class="hero-metric">
-          <span class="hm-value hm-accent" id="heroTotalSavings">₹19,890</span>
-          <span class="hm-label">Max Price Spread</span>
-        </div>
+      <div class="kpi-divider"></div>
+      <div class="kpi-cell">
+        <span class="kpi-num indigo" id="statCanonical">11</span>
+        <span class="kpi-label">Canonical Products</span>
       </div>
-    </div>
-
-    <!-- Hero entity resolution visual -->
-    <div class="hero-visual reveal-up" style="animation-delay:0.3s" id="overview">
-      <div class="entity-viz" id="entityViz">
-        <!-- Floating listing cards -->
-        <div class="listing-card lc-1">
-          <span class="lc-seller">TechHub</span>
-          <span class="lc-title">Apple iPhone 15 128GB Black</span>
-        </div>
-        <div class="listing-card lc-2">
-          <span class="lc-seller">iStore</span>
-          <span class="lc-title">iPhone 15 Apple 128 GB - Black</span>
-        </div>
-        <div class="listing-card lc-3">
-          <span class="lc-seller">GadgetZone</span>
-          <span class="lc-title">Apple iPhone Fifteen 128GB</span>
-        </div>
-        <div class="listing-card lc-4">
-          <span class="lc-seller">MegaRetail</span>
-          <span class="lc-title">iPhone 15 (128GB) Midnight Black</span>
-        </div>
-
-        <!-- SVG connections -->
-        <svg class="entity-connections" id="entityConnections" viewBox="0 0 400 340" preserveAspectRatio="xMidYMid meet">
-          <defs>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-              <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-          <!-- Lines from cards to center -->
-          <line class="conn-line" x1="80" y1="60" x2="200" y2="170" filter="url(#glow)"/>
-          <line class="conn-line" x1="80" y1="280" x2="200" y2="170" filter="url(#glow)"/>
-          <line class="conn-line" x1="320" y1="60" x2="200" y2="170" filter="url(#glow)"/>
-          <line class="conn-line" x1="320" y1="280" x2="200" y2="170" filter="url(#glow)"/>
-          <!-- Traveling dots -->
-          <circle class="conn-dot" r="3" filter="url(#glow)">
-            <animateMotion dur="2.2s" repeatCount="indefinite" begin="0s">
-              <mpath href="#path1"/>
-            </animateMotion>
-          </circle>
-          <circle class="conn-dot" r="3" filter="url(#glow)">
-            <animateMotion dur="2.5s" repeatCount="indefinite" begin="0.6s">
-              <mpath href="#path2"/>
-            </animateMotion>
-          </circle>
-          <circle class="conn-dot" r="3" filter="url(#glow)">
-            <animateMotion dur="2.1s" repeatCount="indefinite" begin="1.1s">
-              <mpath href="#path3"/>
-            </animateMotion>
-          </circle>
-          <circle class="conn-dot" r="3" filter="url(#glow)">
-            <animateMotion dur="2.4s" repeatCount="indefinite" begin="0.3s">
-              <mpath href="#path4"/>
-            </animateMotion>
-          </circle>
-          <path id="path1" d="M80,60 L200,170" fill="none"/>
-          <path id="path2" d="M80,280 L200,170" fill="none"/>
-          <path id="path3" d="M320,60 L200,170" fill="none"/>
-          <path id="path4" d="M320,280 L200,170" fill="none"/>
-        </svg>
-
-        <!-- Central canonical node -->
-        <div class="canonical-node">
-          <div class="cn-ring cn-ring-3"></div>
-          <div class="cn-ring cn-ring-2"></div>
-          <div class="cn-ring cn-ring-1"></div>
-          <div class="cn-core">
-            <span class="cn-label">CANONICAL</span>
-            <span class="cn-product">Apple iPhone 15</span>
-            <span class="cn-spec">128GB · Black</span>
-          </div>
-        </div>
+      <div class="kpi-divider"></div>
+      <div class="kpi-cell">
+        <span class="kpi-num" id="statSellers">8</span>
+        <span class="kpi-label">Competing Marketplaces</span>
       </div>
-
-      <p class="hero-visual-caption">Many listings → One entity</p>
-    </div>
-  </section>
-
-  <!-- ================================================================
-       SECTION 1 — THE PROBLEM
-       ================================================================ -->
-  <section class="problem-section scroll-reveal" id="problem">
-    <div class="section-container">
-      <div class="section-eyebrow">The Challenge</div>
-      <h2 class="section-title">THE SAME PRODUCT.<br><span class="accent-text">DIFFERENT IDENTITIES.</span></h2>
-      <p class="section-subtitle">
-        Sellers use inconsistent naming conventions, abbreviations, and formatting — making it impossible to compare the same physical product across marketplaces.
-      </p>
-
-      <div class="problem-cards">
-        <div class="problem-card scroll-reveal" style="animation-delay:0.05s">
-          <div class="pc-seller-badge">Seller A · TechHub</div>
-          <div class="pc-title">"Apple iPhone 15 128GB Black"</div>
-          <div class="pc-meta">Listing L001 · ₹79,900</div>
-        </div>
-        <div class="problem-card scroll-reveal" style="animation-delay:0.1s">
-          <div class="pc-seller-badge">Seller B · iStore</div>
-          <div class="pc-title">"iPhone 15 Apple 128 GB - Black"</div>
-          <div class="pc-meta">Listing L002 · ₹78,999</div>
-        </div>
-        <div class="problem-card scroll-reveal" style="animation-delay:0.15s">
-          <div class="pc-seller-badge">Seller C · GadgetZone</div>
-          <div class="pc-title">"Apple iPhone Fifteen 128GB Black"</div>
-          <div class="pc-meta">Listing L003 · ₹80,550</div>
-        </div>
-        <div class="problem-card scroll-reveal" style="animation-delay:0.2s">
-          <div class="pc-seller-badge">Seller D · MegaRetail</div>
-          <div class="pc-title">"Apple iPhone 15 (128GB) - Midnight Black"</div>
-          <div class="pc-meta">Listing L004 · ₹79,500</div>
-        </div>
-      </div>
-
-      <div class="problem-arrow scroll-reveal">
-        <svg width="2" height="48" viewBox="0 0 2 48"><line x1="1" y1="0" x2="1" y2="48" stroke="rgba(139,92,246,0.4)" stroke-width="1.5" stroke-dasharray="4 3"/></svg>
-        <div class="problem-verdict">
-          <div class="pv-tag not-equal">NOT EXACTLY EQUAL</div>
-          <div class="pv-but">BUT</div>
-          <div class="pv-tag same-entity">SEMANTICALLY THE SAME ENTITY</div>
-        </div>
-        <svg width="2" height="48" viewBox="0 0 2 48"><line x1="1" y1="0" x2="1" y2="48" stroke="rgba(139,92,246,0.4)" stroke-width="1.5" stroke-dasharray="4 3"/></svg>
-      </div>
-
-      <div class="canonical-result scroll-reveal">
-        <div class="cr-label">RESOLVED CANONICAL ENTITY</div>
-        <div class="cr-name">Apple iPhone 15 (128GB)</div>
-        <div class="cr-specs">4 listings · 4 sellers · Best price ₹78,999 at iStore</div>
+      <div class="kpi-divider"></div>
+      <div class="kpi-cell">
+        <span class="kpi-num emerald" id="statTotalSavings">₹19,890</span>
+        <span class="kpi-label">Max Price Variance (INR)</span>
       </div>
     </div>
   </section>
 
   <!-- ================================================================
-       SECTION 2 — THE ENGINE PIPELINE
+       MAIN APPLICATION VIEW CONTAINER
        ================================================================ -->
-  <section class="pipeline-section scroll-reveal" id="pipeline">
-    <div class="section-container">
-      <div class="section-eyebrow">How the Engine Works</div>
-      <h2 class="section-title">THE RESOLUTION <span class="accent-text">PIPELINE</span></h2>
-      <p class="section-subtitle">Seven intelligent stages transform raw, fragmented listings into clean canonical product entities.</p>
+  <main class="app-main-container">
 
-      <div class="pipeline-flow">
-        <div class="pipeline-step scroll-reveal" style="animation-delay:0.05s">
-          <div class="ps-number">01</div>
-          <div class="ps-content">
-            <div class="ps-name">NORMALIZE</div>
-            <div class="ps-desc">Remove irrelevant formatting differences — punctuation, casing, stop words, and whitespace noise.</div>
+    <!-- ============================================================
+         VIEW 1: PIPELINE WALKTHROUGH (ACADEMIC DEMONSTRATOR)
+         ============================================================ -->
+    <section class="tab-content-pane active" id="tabPane-pipeline" role="tabpanel" aria-labelledby="tabBtnPipeline">
+      
+      <!-- Stepper Progress Header -->
+      <div class="stepper-bar-card">
+        <div class="stepper-title-row">
+          <div>
+            <h1 class="pane-headline">Entity Resolution Pipeline Walkthrough</h1>
+            <p class="pane-subtext">Interactive step-by-step demonstration of the full algorithmic pipeline from raw fragmented listings to canonical catalog.</p>
           </div>
-          <div class="ps-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h10M4 17h7"/></svg>
+          
+          <!-- Playback Controls -->
+          <div class="stepper-controls">
+            <button class="btn-ctrl" id="btnPipelinePrev" title="Previous Stage" disabled>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              <span>Previous</span>
+            </button>
+            <button class="btn-ctrl primary" id="btnPipelinePlay" title="Auto-play all 4 stages">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Auto-Play</span>
+            </button>
+            <button class="btn-ctrl" id="btnPipelineNext" title="Next Stage">
+              <span>Next</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+            <button class="btn-ctrl icon-only" id="btnPipelineReset" title="Restart Pipeline from Step 1">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            </button>
           </div>
         </div>
-        <div class="pipeline-connector"></div>
 
-        <div class="pipeline-step scroll-reveal" style="animation-delay:0.1s">
-          <div class="ps-number">02</div>
-          <div class="ps-content">
-            <div class="ps-name">TOKENIZE</div>
-            <div class="ps-desc">Break product descriptions into meaningful atomic tokens for structural comparison.</div>
+        <!-- 4 Step Indicator Nodes -->
+        <div class="stepper-track">
+          <div class="pipeline-step-node active" data-step="1">
+            <div class="step-circle">1</div>
+            <div class="step-info">
+              <span class="step-num-lbl">Step 1</span>
+              <span class="step-name">Ingestion & Blocking</span>
+            </div>
           </div>
-          <div class="ps-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="6" height="6" rx="1"/><rect x="9" y="7" width="6" height="6" rx="1"/><rect x="16" y="7" width="6" height="6" rx="1"/></svg>
-          </div>
-        </div>
-        <div class="pipeline-connector"></div>
+          <div class="step-connector"></div>
 
-        <div class="pipeline-step scroll-reveal" style="animation-delay:0.15s">
-          <div class="ps-number">03</div>
-          <div class="ps-content">
-            <div class="ps-name">BLOCK</div>
-            <div class="ps-desc">Group candidates by shared key signals to avoid O(n²) exhaustive pairwise comparisons.</div>
+          <div class="pipeline-step-node" data-step="2">
+            <div class="step-circle">2</div>
+            <div class="step-info">
+              <span class="step-num-lbl">Step 2</span>
+              <span class="step-name">Algorithm Scoring</span>
+            </div>
           </div>
-          <div class="ps-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-          </div>
-        </div>
-        <div class="pipeline-connector"></div>
+          <div class="step-connector"></div>
 
-        <div class="pipeline-step scroll-reveal" style="animation-delay:0.2s">
-          <div class="ps-number">04</div>
-          <div class="ps-content">
-            <div class="ps-name">MATCH</div>
-            <div class="ps-desc">Apply KMP, Rabin-Karp, Suffix Array, and Wagner-Fischer algorithms for multi-signal matching.</div>
+          <div class="pipeline-step-node" data-step="3">
+            <div class="step-circle">3</div>
+            <div class="step-info">
+              <span class="step-num-lbl">Step 3</span>
+              <span class="step-name">Graph Clustering</span>
+            </div>
           </div>
-          <div class="ps-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/></svg>
-          </div>
-        </div>
-        <div class="pipeline-connector"></div>
+          <div class="step-connector"></div>
 
-        <div class="pipeline-step scroll-reveal" style="animation-delay:0.25s">
-          <div class="ps-number">05</div>
-          <div class="ps-content">
-            <div class="ps-name">SCORE</div>
-            <div class="ps-desc">Combine Jaccard token similarity, edit distance, and substring overlap into a composite confidence score.</div>
-          </div>
-          <div class="ps-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-          </div>
-        </div>
-        <div class="pipeline-connector"></div>
-
-        <div class="pipeline-step scroll-reveal" style="animation-delay:0.3s">
-          <div class="ps-number">06</div>
-          <div class="ps-content">
-            <div class="ps-name">CLUSTER</div>
-            <div class="ps-desc">Use graph-based clustering to group all listings that refer to the same real-world product.</div>
-          </div>
-          <div class="ps-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="16" r="2"/><circle cx="5" cy="16" r="2"/><line x1="12" y1="7" x2="12" y2="10"/><line x1="17.5" y1="14.5" x2="14" y2="12.8"/><line x1="6.5" y1="14.5" x2="10" y2="12.8"/></svg>
-          </div>
-        </div>
-        <div class="pipeline-connector"></div>
-
-        <div class="pipeline-step ps-final scroll-reveal" style="animation-delay:0.35s">
-          <div class="ps-number ps-number-final">07</div>
-          <div class="ps-content">
-            <div class="ps-name">CANONICALIZE</div>
-            <div class="ps-desc">Create one unified, authoritative product representation — the canonical entity — for clean catalog display.</div>
-          </div>
-          <div class="ps-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <div class="pipeline-step-node" data-step="4">
+            <div class="step-circle">4</div>
+            <div class="step-info">
+              <span class="step-num-lbl">Step 4</span>
+              <span class="step-name">Canonical Catalog</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="flow-arrow-label scroll-reveal">
-        <div class="fal-line">
-          <span class="fal-text">RAW LISTINGS</span>
-          <svg width="120" height="2" viewBox="0 0 120 2"><line x1="0" y1="1" x2="120" y2="1" stroke="rgba(139,92,246,0.35)" stroke-width="1.5" stroke-dasharray="4 3"/></svg>
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="6,0 12,6 6,12" stroke="rgba(139,92,246,0.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span class="fal-text">CANONICAL ENTITY</span>
+      <!-- Pipeline Dynamic Stage Split Layout -->
+      <div class="pipeline-stage-split">
+        <!-- Left: Academic Explanation Card -->
+        <div class="pipeline-left-col" id="pipelineInfoCard">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+
+        <!-- Right: Interactive Dynamic Visual Stage -->
+        <div class="pipeline-right-col" id="pipelineStageContainer">
+          <!-- Rendered dynamically by app.js -->
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ================================================================
-       SECTION 3 — ALGORITHM INTELLIGENCE
-       ================================================================ -->
-  <section class="algorithms-section" id="algorithms-section">
-    <div class="section-container">
-      <div class="section-eyebrow">Algorithm Intelligence</div>
-      <h2 class="section-title">EIGHT ALGORITHMS.<br><span class="accent-text">ONE ENGINE.</span></h2>
-      <p class="section-subtitle">Each algorithm contributes a distinct signal to the entity resolution confidence score.</p>
+    <!-- ============================================================
+         VIEW 2: ALGORITHM LAB (DYNAMIC PROGRAMMING MATRIX & STRING LAB)
+         ============================================================ -->
+    <section class="tab-content-pane" id="tabPane-lab" role="tabpanel" aria-labelledby="tabBtnLab">
+      <div class="pane-header-box">
+        <h2 class="pane-headline">Algorithm Deep-Dive Laboratory</h2>
+        <p class="pane-subtext">Inspect and demonstrate the manual first-principles algorithms implemented for this project: Wagner-Fischer 2D DP matrix, KMP prefix failure array, Rabin-Karp rolling hashes, and Suffix Arrays.</p>
 
-      <div class="algo-grid">
-        <div class="algo-card scroll-reveal" style="animation-delay:0.05s">
-          <div class="ac-header">
-            <div class="ac-tag">String Search</div>
-            <div class="ac-visual">
-              <span class="ac-glyph">KMP</span>
-            </div>
-          </div>
-          <div class="ac-name">Knuth-Morris-Pratt</div>
-          <div class="ac-desc">Linear-time pattern matching using a failure function to skip redundant character comparisons.</div>
-          <div class="ac-complexity"><span>O(n+m)</span> time complexity</div>
-        </div>
-
-        <div class="algo-card scroll-reveal" style="animation-delay:0.1s">
-          <div class="ac-header">
-            <div class="ac-tag">Rolling Hash</div>
-            <div class="ac-visual">
-              <span class="ac-glyph">RK</span>
-            </div>
-          </div>
-          <div class="ac-name">Rabin-Karp</div>
-          <div class="ac-desc">Hash-based substring search using rolling hash windows for efficient multi-pattern detection.</div>
-          <div class="ac-complexity"><span>O(n+m)</span> average case</div>
-        </div>
-
-        <div class="algo-card scroll-reveal" style="animation-delay:0.15s">
-          <div class="ac-header">
-            <div class="ac-tag">Substring Analysis</div>
-            <div class="ac-visual">
-              <span class="ac-glyph">SA</span>
-            </div>
-          </div>
-          <div class="ac-name">Suffix Array + LCP</div>
-          <div class="ac-desc">Longest Common Prefix analysis over sorted suffixes to identify shared product token sequences.</div>
-          <div class="ac-complexity"><span>O(n log n)</span> construction</div>
-        </div>
-
-        <div class="algo-card scroll-reveal" style="animation-delay:0.2s">
-          <div class="ac-header">
-            <div class="ac-tag">Edit Distance</div>
-            <div class="ac-visual">
-              <span class="ac-glyph">WF</span>
-            </div>
-          </div>
-          <div class="ac-name">Wagner-Fischer</div>
-          <div class="ac-desc">Dynamic programming computation of Levenshtein edit distance to measure character-level similarity.</div>
-          <div class="ac-complexity"><span>O(n×m)</span> DP table</div>
-        </div>
-
-        <div class="algo-card scroll-reveal" style="animation-delay:0.25s">
-          <div class="ac-header">
-            <div class="ac-tag">Token Similarity</div>
-            <div class="ac-visual">
-              <span class="ac-glyph">J</span>
-            </div>
-          </div>
-          <div class="ac-name">Jaccard Similarity</div>
-          <div class="ac-desc">Set-theoretic overlap of token bags: |A∩B| / |A∪B| for robust, order-independent comparison.</div>
-          <div class="ac-complexity"><span>|A∩B| / |A∪B|</span> metric</div>
-        </div>
-
-        <div class="algo-card scroll-reveal" style="animation-delay:0.3s">
-          <div class="ac-header">
-            <div class="ac-tag">Efficiency</div>
-            <div class="ac-visual">
-              <span class="ac-glyph">BL</span>
-            </div>
-          </div>
-          <div class="ac-name">Blocking</div>
-          <div class="ac-desc">Candidate pair reduction by partitioning the listing space using shared key features before full comparison.</div>
-          <div class="ac-complexity"><span>O(n) → O(k)</span> reduction</div>
-        </div>
-
-        <div class="algo-card scroll-reveal" style="animation-delay:0.35s">
-          <div class="ac-header">
-            <div class="ac-tag">Graph Theory</div>
-            <div class="ac-visual">
-              <span class="ac-glyph">GM</span>
-            </div>
-          </div>
-          <div class="ac-name">Graph Matching</div>
-          <div class="ac-desc">Model listings as graph nodes with similarity-weighted edges, then resolve connected components into entity groups.</div>
-          <div class="ac-complexity"><span>G(V,E)</span> graph model</div>
-        </div>
-
-        <div class="algo-card scroll-reveal" style="animation-delay:0.4s">
-          <div class="ac-header">
-            <div class="ac-tag">Entity Formation</div>
-            <div class="ac-visual">
-              <span class="ac-glyph">CL</span>
-            </div>
-          </div>
-          <div class="ac-name">Clustering</div>
-          <div class="ac-desc">Transitive closure over matched pairs groups all variant listings into one coherent canonical entity cluster.</div>
-          <div class="ac-complexity"><span>Transitive</span> closure</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================================================================
-       APP INTERFACE — Tab Nav + all 4 Views
-       ================================================================ -->
-  <section class="app-section" id="catalog-section">
-    <div class="app-section-header">
-      <div class="section-container">
-        <div class="section-eyebrow">Live Platform</div>
-        <h2 class="section-title">ENTITY INTELLIGENCE <span class="accent-text">INTERFACE</span></h2>
-      </div>
-    </div>
-
-    <!-- Segmented Tab Navigation -->
-    <div class="app-tab-bar">
-      <div class="app-tab-inner">
-        <nav class="segmented-nav" role="tablist" aria-label="Main Views">
-          <button class="tab-btn active" data-tab="catalog" role="tab" aria-selected="true">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            Canonical Catalog
+        <!-- Lab Sub-Navigation -->
+        <div class="lab-algo-nav">
+          <button class="lab-algo-tab active" data-algo="levenshtein">
+            <span>Wagner-Fischer 2D DP Matrix</span>
           </button>
-          <button class="tab-btn" data-tab="duplicates" role="tab" aria-selected="false">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="16" r="2"/><circle cx="5" cy="16" r="2"/><line x1="12" y1="7" x2="12" y2="10"/><line x1="17.5" y1="14.5" x2="14" y2="12.8"/><line x1="6.5" y1="14.5" x2="10" y2="12.8"/></svg>
-            Resolution Clusters
+          <button class="lab-algo-tab" data-algo="kmp">
+            <span>Knuth-Morris-Pratt (KMP) & π-Array</span>
           </button>
-          <button class="tab-btn" data-tab="matrix" role="tab" aria-selected="false" id="price-section">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            Price Intelligence
+          <button class="lab-algo-tab" data-algo="rabinkarp">
+            <span>Rabin-Karp Rolling Hash</span>
           </button>
-          <button class="tab-btn" data-tab="playground" role="tab" aria-selected="false" id="resolution-section">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            Entity Matcher
+          <button class="lab-algo-tab" data-algo="suffix">
+            <span>Suffix Array & Kasai's LCP</span>
           </button>
-        </nav>
-
-        <!-- Filter controls -->
-        <div class="controls-strip">
-          <div class="category-chips" role="group" aria-label="Category filters">
-            <button class="category-pill active" data-category="All">All</button>
-            <button class="category-pill" data-category="Smartphones">Smartphones</button>
-            <button class="category-pill" data-category="Audio">Audio</button>
-            <button class="category-pill" data-category="Laptops">Laptops</button>
-            <button class="category-pill" data-category="Tablets">Tablets</button>
-            <button class="category-pill" data-category="Monitors">Monitors</button>
-            <button class="category-pill" data-category="Gaming">Gaming</button>
-            <button class="category-pill" data-category="Accessories">Accessories</button>
-          </div>
-          <div class="controls-right">
-            <select class="clean-select" id="brandSelect" aria-label="Filter by brand">
-              <option value="All">All Brands</option>
-              <option value="Apple">Apple</option>
-              <option value="Samsung">Samsung</option>
-              <option value="Sony">Sony</option>
-              <option value="Dell">Dell</option>
-              <option value="Bose">Bose</option>
-              <option value="Logitech">Logitech</option>
-              <option value="ASUS">ASUS</option>
-              <option value="Google">Google</option>
-            </select>
-            <select class="clean-select" id="sortSelect" aria-label="Sort products">
-              <option value="featured">Featured</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="savings-high">Highest Savings</option>
-              <option value="sellers-high">Most Sellers</option>
-            </select>
-            <span class="results-badge" id="resultsCountText">11 entities</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Main View Container -->
-    <main class="main-content">
-
-      <!-- View 1: Canonical Catalog -->
-      <div class="view-pane active" id="catalogViewPane" role="tabpanel">
-        <div class="product-grid" id="productCatalogGrid">
-          <!-- Rendered by app.js -->
         </div>
       </div>
 
-      <!-- View 2: Resolution Clusters -->
-      <div class="view-pane" id="duplicatesViewPane" role="tabpanel">
-        <div class="view-intro">
-          <div class="intro-text">
-            <h2>Resolution Clusters & Source Variations</h2>
-            <p>Each group demonstrates how raw listing titles from divergent sellers are matched and clustered into a single canonical entity using graph-based resolution.</p>
+      <!-- Sub-view 2.1: Wagner-Fischer DP Table -->
+      <div class="lab-algo-view active" id="labView-levenshtein">
+        <div class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <h3>Wagner-Fischer Dynamic Programming Edit Distance Table</h3>
+              <p>Generates the complete 2D DP table. The backtracked optimal alignment path is highlighted in glowing emerald.</p>
+            </div>
+            <div class="complexity-pill">Time: O(M × N) • Space: O(M × N)</div>
           </div>
-        </div>
-        <div class="cluster-list" id="duplicatesGroupList">
-          <!-- Rendered by app.js -->
-        </div>
-      </div>
 
-      <!-- View 3: Price Intelligence Matrix -->
-      <div class="view-pane" id="matrixViewPane" role="tabpanel">
-        <div class="view-intro">
-          <div class="intro-text">
-            <h2>Price Intelligence Matrix</h2>
-            <p>Cross-seller pricing intelligence showing the lowest verified offer and total market variance for each canonical product entity.</p>
-          </div>
-        </div>
-        <div class="table-card">
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Canonical Product</th>
-                  <th>Best Price</th>
-                  <th>Cheapest Seller</th>
-                  <th>Highest Listing</th>
-                  <th>Price Spread</th>
-                  <th>Seller Offers</th>
-                  <th style="text-align: right;">Action</th>
-                </tr>
-              </thead>
-              <tbody id="matrixTableBody">
-                <!-- Rendered by app.js -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- View 4: Entity Matcher Sandbox -->
-      <div class="view-pane" id="playgroundViewPane" role="tabpanel">
-        <div class="view-intro">
-          <div class="intro-text">
-            <h2>Live Entity Matcher Sandbox</h2>
-            <p>Test the entity resolution similarity pipeline in real time. Compare two marketplace titles using Jaccard token overlap, Levenshtein edit distance, and substring analysis.</p>
-          </div>
-        </div>
-
-        <div class="sandbox-layout">
-          <!-- Input Panel -->
-          <div class="sandbox-panel">
-            <div class="panel-header">
-              <h3>Input Title Pair</h3>
-              <div class="preset-wrap">
-                <label for="sandboxPresetSelect">Preset:</label>
-                <select id="sandboxPresetSelect" class="clean-select select-compact"></select>
-              </div>
+          <!-- Controls -->
+          <div class="dp-controls-strip">
+            <div class="input-group">
+              <label for="dpStr1">Source String S₁ (Rows):</label>
+              <input type="text" id="dpStr1" value="iPhone 15" maxlength="20" />
             </div>
 
-            <div class="sandbox-inputs">
-              <div class="input-field">
-                <label for="sandboxStr1">Listing A — Raw Marketplace Title</label>
-                <textarea id="sandboxStr1" rows="3" spellcheck="false" placeholder="e.g. Apple iPhone 15 128GB Black"></textarea>
-              </div>
-              <div class="input-field">
-                <label for="sandboxStr2">Listing B — Raw Marketplace Title</label>
-                <textarea id="sandboxStr2" rows="3" spellcheck="false" placeholder="e.g. iPhone 15 Apple 128 GB - Midnight Black"></textarea>
-              </div>
+            <div class="input-group">
+              <label for="dpStr2">Target String S₂ (Columns):</label>
+              <input type="text" id="dpStr2" value="iPhone 15 Pro" maxlength="20" />
             </div>
 
-            <button class="btn-primary" id="btnRunSandboxMatch">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-              </svg>
-              <span>RESOLVE ENTITY</span>
+            <div class="input-group select-group">
+              <label for="dpPresetSelect">Academic Preset:</label>
+              <select id="dpPresetSelect">
+                <option value="0">iPhone 15 Variation</option>
+                <option value="1">Sony Headphone Typo</option>
+                <option value="2">Fifteen vs 15</option>
+                <option value="3">Dell XPS Spec Shift</option>
+              </select>
+            </div>
+
+            <button class="btn-lab-action" id="btnGenerateDpMatrix">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+              Recompute Matrix
             </button>
           </div>
 
-          <!-- Output Metric Panel -->
-          <div class="sandbox-panel">
-            <div class="panel-header">
-              <h3>Algorithm Analysis</h3>
-              <span id="sandboxVerdictBadge" class="verdict-pill verdict-match">Match</span>
+          <!-- Stats Pill Bar -->
+          <div class="dp-stats-bar" id="dpStatsBox">
+            <!-- Rendered by app.js -->
+          </div>
+
+          <!-- Matrix Container -->
+          <div class="dp-table-scroll-wrap" id="dpMatrixTableContainer">
+            <!-- Rendered by app.js -->
+          </div>
+
+          <!-- Recurrence Explanation -->
+          <div class="lab-academic-footnote">
+            <strong>Recurrence Relation:</strong>
+            <code>DP[i][j] = (S₁[i-1] == S₂[j-1]) ? DP[i-1][j-1] : 1 + min(DP[i-1][j] (Del), DP[i][j-1] (Ins), DP[i-1][j-1] (Sub))</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub-view 2.2: KMP & LPS Table -->
+      <div class="lab-algo-view" id="labView-kmp">
+        <div class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <h3>Knuth-Morris-Pratt (KMP) Prefix Function (π-Array)</h3>
+              <p>Constructs the Longest Proper Prefix which is also a Suffix (LPS) table, enabling linear string search without backtracking.</p>
+            </div>
+            <div class="complexity-pill">Search: O(N) • Precompute: O(M)</div>
+          </div>
+
+          <div class="dp-controls-strip">
+            <div class="input-group">
+              <label for="kmpPatternInput">Pattern P (Model / Token):</label>
+              <input type="text" id="kmpPatternInput" value="1000XM5" maxlength="30" />
             </div>
 
-            <div class="sandbox-results">
-              <!-- Composite Confidence -->
-              <div class="composite-score-row">
-                <div class="score-circle">
-                  <svg class="score-ring" viewBox="0 0 60 60">
-                    <circle class="sr-bg" cx="30" cy="30" r="24" fill="none" stroke-width="3"/>
-                    <circle class="sr-fill" id="scoreRingFill" cx="30" cy="30" r="24" fill="none" stroke-width="3" stroke-dasharray="150.8" stroke-dashoffset="7.54" stroke-linecap="round" transform="rotate(-90 30 30)"/>
-                  </svg>
-                  <span class="score-value" id="sandboxCompositeScore">95%</span>
-                </div>
-                <div class="score-meta">
-                  <span class="meta-title">Composite Confidence Score</span>
-                  <span class="meta-desc">Weighted: Token Jaccard (40%) + Edit Distance (35%) + Substring Match (25%)</span>
-                </div>
+            <div class="input-group wide">
+              <label for="kmpTextInput">Text T (Raw Marketplace Title):</label>
+              <input type="text" id="kmpTextInput" value="Sony WH-1000XM5 Wireless Headphones WH1000XM5 Noise Cancelling" />
+            </div>
+
+            <button class="btn-lab-action" id="btnRunKmpMatcher">Run KMP Search</button>
+          </div>
+
+          <div class="dp-stats-bar" id="kmpStatsBox"></div>
+
+          <div class="lab-sub-section">
+            <h4>1. Precomputed Longest Prefix-Suffix (π-Array)</h4>
+            <div class="kmp-table-scroll" id="kmpLpsTableContainer"></div>
+          </div>
+
+          <div class="lab-sub-section">
+            <h4>2. Monotonic Text Stream Match Results</h4>
+            <div class="kmp-text-display-box" id="kmpTextOutput"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub-view 2.3: Rabin-Karp Rolling Hash -->
+      <div class="lab-algo-view" id="labView-rabinkarp">
+        <div class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <h3>Rabin-Karp Rolling Polynomial Hash Calculator</h3>
+              <p>Demonstrates constant time O(1) hash updates across shifting character windows using modular polynomial arithmetic.</p>
+            </div>
+            <div class="complexity-pill">Average: O(N + M) • Space: O(1)</div>
+          </div>
+
+          <div class="dp-controls-strip">
+            <div class="input-group">
+              <label for="rkPatternInput">Target Pattern:</label>
+              <input type="text" id="rkPatternInput" value="128GB" maxlength="20" />
+            </div>
+
+            <div class="input-group wide">
+              <label for="rkTextInput">Text Title:</label>
+              <input type="text" id="rkTextInput" value="Apple iPhone 15 128GB Black Smartphone" />
+            </div>
+
+            <button class="btn-lab-action" id="btnRunRkCalculator">Calculate Rolling Hash</button>
+          </div>
+
+          <div class="formula-box" style="margin-bottom:1.5rem;">
+            <code>H(S[i..i+M-1]) = (∑ S[i+j] · B^(M-1-j)) mod Q  |  Base B=256, Prime Q=1,000,000,007</code>
+          </div>
+
+          <div id="rkOutputContainer"></div>
+        </div>
+      </div>
+
+      <!-- Sub-view 2.4: Suffix Array & LCP -->
+      <div class="lab-algo-view" id="labView-suffix">
+        <div class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <h3>Suffix Array & Kasai's Longest Common Prefix (LCP)</h3>
+              <p>Constructs sorted suffixes and Kasai's linear-time LCP array to identify maximal shared substring patterns.</p>
+            </div>
+            <div class="complexity-pill">Suffix Sort: O(N log N) • Kasai LCP: O(N)</div>
+          </div>
+
+          <div class="dp-controls-strip">
+            <div class="input-group wide">
+              <label for="suffixInput">Input Title String (or S₁#S₂):</label>
+              <input type="text" id="suffixInput" value="iPhone15#Apple15" maxlength="40" />
+            </div>
+
+            <button class="btn-lab-action" id="btnRunSuffixArray">Build Suffix Array</button>
+          </div>
+
+          <div id="suffixOutputContainer"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         VIEW 3: LIVE TITLE MATCHER SANDBOX
+         ============================================================ -->
+    <section class="tab-content-pane" id="tabPane-sandbox" role="tabpanel" aria-labelledby="tabBtnSandbox">
+      <div class="pane-header-box">
+        <h2 class="pane-headline">Live Entity Matcher Sandbox</h2>
+        <p class="pane-subtext">Test any two product listing titles in real-time. Inspect the composite confidence score and multi-algorithm contributions.</p>
+      </div>
+
+      <div class="sandbox-container-grid">
+        <!-- Input & Controls Column -->
+        <div class="sandbox-inputs-card">
+          <div class="preset-select-bar">
+            <label for="sandboxPresetSelect">Quick Test Presets:</label>
+            <select id="sandboxPresetSelect"></select>
+          </div>
+
+          <div class="sandbox-textarea-group">
+            <label for="sandboxStr1">Listing Title A (Seller 1):</label>
+            <textarea id="sandboxStr1" rows="3" placeholder="Enter first product listing title..."></textarea>
+          </div>
+
+          <div class="swap-btn-wrap">
+            <button class="btn-swap" id="btnSwapStrings" title="Swap Titles">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16V4M7 4L3 8M7 4l4 4M17 8v12M17 20l4-4M17 20l-4-4"/></svg>
+              <span>Swap Titles</span>
+            </button>
+          </div>
+
+          <div class="sandbox-textarea-group">
+            <label for="sandboxStr2">Listing Title B (Seller 2):</label>
+            <textarea id="sandboxStr2" rows="3" placeholder="Enter second product listing title..."></textarea>
+          </div>
+
+          <!-- Threshold Slider -->
+          <div class="threshold-slider-group">
+            <div class="slider-header">
+              <label for="sandboxThresholdSlider">Resolution Decision Threshold:</label>
+              <span class="threshold-val-badge" id="sandboxThresholdVal">68%</span>
+            </div>
+            <input type="range" id="sandboxThresholdSlider" min="50" max="90" value="68" step="1" />
+            <div class="slider-ticks">
+              <span>50% (Permissive)</span>
+              <span>68% (Optimal Academic Default)</span>
+              <span>90% (Strict)</span>
+            </div>
+          </div>
+
+          <button class="btn-run-match-main" id="btnRunMatch">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Evaluate Entity Match
+          </button>
+        </div>
+
+        <!-- Verdict & Breakdown Column -->
+        <div class="sandbox-results-card">
+          <!-- Verdict Dial -->
+          <div class="verdict-banner-box">
+            <div class="score-dial-wrap">
+              <span class="dial-score" id="sandboxScoreNum">95%</span>
+              <span class="dial-lbl">Composite Confidence</span>
+            </div>
+            <div class="verdict-status-wrap">
+              <div class="verdict-badge match" id="sandboxVerdictBadge">
+                ✔ RESOLVED: Same Canonical Product Entity
               </div>
+              <p class="verdict-explanation" id="sandboxExplanation">
+                Composite confidence score of 95% exceeds the required 68% threshold. Transitive union edge created.
+              </p>
+            </div>
+          </div>
 
-              <!-- Algorithm Breakdown -->
-              <div class="breakdown-list">
-                <div class="breakdown-item">
-                  <div class="breakdown-header">
-                    <span class="breakdown-name">Jaccard Token Similarity</span>
-                    <span class="breakdown-score" id="sandboxValToken">90%</span>
-                  </div>
-                  <div class="progress-track">
-                    <div class="progress-bar" id="sandboxBarToken" style="width: 90%;"></div>
-                  </div>
-                </div>
+          <!-- Multi-Algorithm Contribution Meters -->
+          <div class="breakdown-meters-section">
+            <h4 class="meters-title">Algorithmic Weight Contribution</h4>
 
-                <div class="breakdown-item">
-                  <div class="breakdown-header">
-                    <span class="breakdown-name">Wagner-Fischer Edit Distance</span>
-                    <span class="breakdown-score" id="sandboxValEdit">88%</span>
-                  </div>
-                  <div class="progress-track">
-                    <div class="progress-bar" id="sandboxBarEdit" style="width: 88%;"></div>
-                  </div>
-                </div>
+            <!-- 1. Jaccard Token Overlap -->
+            <div class="meter-item">
+              <div class="meter-info">
+                <span class="m-name">Token Jaccard Similarity (Weight: 40%)</span>
+                <span class="m-val" id="valJaccard">100%</span>
+              </div>
+              <div class="meter-track">
+                <div class="meter-fill indigo" id="barJaccard" style="width: 100%;"></div>
+              </div>
+            </div>
 
-                <div class="breakdown-item">
-                  <div class="breakdown-header">
-                    <span class="breakdown-name">Substring & Prefix Overlap</span>
-                    <span class="breakdown-score" id="sandboxValSub">100%</span>
-                  </div>
-                  <div class="progress-track">
-                    <div class="progress-bar" id="sandboxBarSub" style="width: 100%;"></div>
-                  </div>
-                </div>
+            <!-- 2. Wagner-Fischer Edit Distance -->
+            <div class="meter-item">
+              <div class="meter-info">
+                <span class="m-name">Wagner-Fischer DP Similarity (Weight: 35%)</span>
+                <span class="m-val" id="valLev">91% (Dist: 6)</span>
+              </div>
+              <div class="meter-track">
+                <div class="meter-fill emerald" id="barLev" style="width: 91%;"></div>
+              </div>
+            </div>
+
+            <!-- 3. KMP / Substring Overlap -->
+            <div class="meter-item">
+              <div class="meter-info">
+                <span class="m-name">Substring & Model Token Overlap (Weight: 25%)</span>
+                <span class="m-val" id="valSub">93%</span>
+              </div>
+              <div class="meter-track">
+                <div class="meter-fill cyan" id="barSub" style="width: 93%;"></div>
               </div>
             </div>
           </div>
+
+          <!-- Formula Recurrence Note -->
+          <div class="formula-box">
+            <span class="formula-label">Composite Scoring Formula:</span>
+            <code>Score = (0.40 · Jaccard) + (0.35 · LevenshteinScore) + (0.25 · SubstringRatio)</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         VIEW 4: UNIFIED CATALOG & PRICE INTELLIGENCE STOREFRONT
+         ============================================================ -->
+    <section class="tab-content-pane" id="tabPane-catalog" role="tabpanel" aria-labelledby="tabBtnCatalog">
+      <!-- Storefront Filter Controls Header -->
+      <div class="catalog-header-bar">
+        <div class="catalog-search-wrap">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="catalogSearchInput" placeholder="Search canonical catalog by product, brand, specs, or seller..." aria-label="Search catalog" />
+        </div>
+
+        <div class="catalog-dropdowns">
+          <select id="brandSelect" aria-label="Filter by Brand"></select>
+          <select id="sortSelect" aria-label="Sort products">
+            <option value="savings">Sort: Highest Consumer Savings</option>
+            <option value="priceAsc">Sort: Lowest Price First</option>
+            <option value="priceDesc">Sort: Highest Price First</option>
+            <option value="rating">Sort: Top Customer Rating</option>
+          </select>
         </div>
       </div>
 
-    </main>
-  </section>
+      <!-- Category Filter Pills -->
+      <div class="cat-pills-row" id="categoryPillsContainer" role="radiogroup" aria-label="Filter by Category"></div>
+
+      <!-- Results Count Bar -->
+      <div class="catalog-status-strip">
+        <span class="results-count" id="catalogResultsCount">Showing 11 of 11 canonical products</span>
+        <span class="currency-tag">Standardized Currency: Indian Rupee (INR - ₹)</span>
+      </div>
+
+      <!-- Canonical Products Grid -->
+      <div class="catalog-grid" id="catalogGrid">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </section>
+
+    <!-- ============================================================
+         VIEW 5: ACADEMIC BENCHMARKS & REPORT
+         ============================================================ -->
+    <section class="tab-content-pane" id="tabPane-benchmarks" role="tabpanel" aria-labelledby="tabBtnBenchmarks">
+      <div class="pane-header-box">
+        <h2 class="pane-headline">Academic Benchmarks & Complexity Analysis</h2>
+        <p class="pane-subtext">Theoretical computational bounds, algorithmic justifications, and empirical benchmark evaluations on multi-seller electronics datasets.</p>
+
+        <div class="benchmark-actions-row">
+          <button class="btn-bench-action" id="btnExportJson">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export Catalog JSON
+          </button>
+          <button class="btn-bench-action" id="btnExportCsv">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Export Benchmarks CSV
+          </button>
+          <button class="btn-bench-action ghost" id="btnCopySummary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Summary Report
+          </button>
+        </div>
+      </div>
+
+      <!-- Empirical Comparison Cards -->
+      <div class="benchmark-kpi-grid">
+        <div class="bench-kpi-card">
+          <span class="bench-kpi-lbl">Search Space Reduction</span>
+          <span class="bench-kpi-val emerald">92.4%</span>
+          <p class="bench-kpi-desc">24,090 comparisons pruned down to 1,842 candidate pairs via Blocking Index (N=220).</p>
+        </div>
+
+        <div class="bench-kpi-card">
+          <span class="bench-kpi-lbl">Execution Speedup</span>
+          <span class="bench-kpi-val cyan">11.1x Faster</span>
+          <p class="bench-kpi-desc">Pipeline execution reduced from 420 ms (brute force) to 38 ms.</p>
+        </div>
+
+        <div class="bench-kpi-card">
+          <span class="bench-kpi-lbl">Resolution Precision</span>
+          <span class="bench-kpi-val indigo">99.4%</span>
+          <p class="bench-kpi-desc">Cross-seller cluster accuracy verified against ground-truth canonical catalog.</p>
+        </div>
+
+        <div class="bench-kpi-card">
+          <span class="bench-kpi-lbl">Memory Conservation</span>
+          <span class="bench-kpi-val amber">70.7% Saved</span>
+          <p class="bench-kpi-desc">Peak heap memory pruned from 82 MB down to 24 MB during pairwise resolution.</p>
+        </div>
+      </div>
+
+      <!-- Algorithms Complexity Table -->
+      <div class="bench-table-card">
+        <h3 class="bench-table-title">Manual Algorithm Complexity & Role Analysis</h3>
+        <div class="bench-table-wrap">
+          <table class="benchmarks-table">
+            <thead>
+              <tr>
+                <th>Algorithm Name</th>
+                <th>Domain / Role</th>
+                <th>Time Complexity</th>
+                <th>Space Complexity</th>
+                <th>Empirical Latency</th>
+                <th>Theoretical Contribution</th>
+              </tr>
+            </thead>
+            <tbody id="benchmarksTableBody">
+              <!-- Rendered by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
 
   <!-- ================================================================
-       SECTION — ARCHITECTURE DIAGRAM
-       ================================================================ -->
-  <section class="arch-section scroll-reveal" id="arch-section">
-    <div class="section-container">
-      <div class="section-eyebrow">System Architecture</div>
-      <h2 class="section-title">FROM RAW DATA TO<br><span class="accent-text">PRICE INTELLIGENCE</span></h2>
-
-      <div class="arch-flow">
-        <div class="arch-node scroll-reveal" style="animation-delay:0.0s"><span>RAW CSV DATA</span></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node scroll-reveal" style="animation-delay:0.05s"><span>DATA INGESTION</span></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node scroll-reveal" style="animation-delay:0.1s"><span>TEXT NORMALIZATION</span></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node scroll-reveal" style="animation-delay:0.15s"><span>TOKENIZATION</span></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node scroll-reveal" style="animation-delay:0.2s"><span>BLOCKING</span></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node scroll-reveal" style="animation-delay:0.25s"><span>CANDIDATE GENERATION</span></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node scroll-reveal" style="animation-delay:0.3s"><span>SIMILARITY ENGINE</span></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node scroll-reveal" style="animation-delay:0.35s"><span>GRAPH MATCHING</span></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node scroll-reveal" style="animation-delay:0.4s"><span>CLUSTERING</span></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node arch-node-final scroll-reveal" style="animation-delay:0.45s"><span>CANONICAL PRODUCT</span></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node scroll-reveal" style="animation-delay:0.5s"><span>PRICE INTELLIGENCE</span></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node scroll-reveal" style="animation-delay:0.55s"><span>WEB INTERFACE</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================================================================
-       SECTION — TECH STACK
-       ================================================================ -->
-  <section class="tech-section scroll-reveal" id="tech-section">
-    <div class="section-container">
-      <div class="section-eyebrow">Technical Foundation</div>
-      <h2 class="section-title">ENGINEERING <span class="accent-text">ARCHITECTURE</span></h2>
-
-      <div class="tech-grid">
-        <div class="tech-card scroll-reveal" style="animation-delay:0.05s">
-          <div class="tc-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          </div>
-          <div class="tc-name">Java 17+</div>
-          <div class="tc-role">Core entity-resolution engine</div>
-        </div>
-        <div class="tech-card scroll-reveal" style="animation-delay:0.1s">
-          <div class="tc-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-          </div>
-          <div class="tc-name">Maven</div>
-          <div class="tc-role">Build & dependency management</div>
-        </div>
-        <div class="tech-card scroll-reveal" style="animation-delay:0.15s">
-          <div class="tc-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-          </div>
-          <div class="tc-name">HTML5 / CSS3</div>
-          <div class="tc-role">Frontend structure & visual system</div>
-        </div>
-        <div class="tech-card scroll-reveal" style="animation-delay:0.2s">
-          <div class="tc-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          </div>
-          <div class="tc-name">JavaScript</div>
-          <div class="tc-role">Frontend interaction & matching logic</div>
-        </div>
-        <div class="tech-card scroll-reveal" style="animation-delay:0.25s">
-          <div class="tc-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          </div>
-          <div class="tc-name">Netlify</div>
-          <div class="tc-role">Frontend deployment & CDN</div>
-        </div>
-        <div class="tech-card scroll-reveal" style="animation-delay:0.3s">
-          <div class="tc-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-          </div>
-          <div class="tc-name">CSV Data</div>
-          <div class="tc-role">Raw listing ingestion format</div>
-        </div>
-      </div>
-
-      <div class="algo-tags scroll-reveal" style="animation-delay:0.35s">
-        <span class="at-label">Implemented Algorithms:</span>
-        <span class="algo-tag">String Algorithms</span>
-        <span class="algo-tag">Dynamic Programming</span>
-        <span class="algo-tag">Graph Algorithms</span>
-        <span class="algo-tag">Hashing</span>
-        <span class="algo-tag">Set Theory</span>
-        <span class="algo-tag">Transitive Closure</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================================================================
-       SELLER MODAL
+       MODAL DRAWER: MULTI-SELLER PRICE COMPARISON
        ================================================================ -->
   <div class="modal-overlay" id="sellerModalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalProductTitle">
     <div class="modal-dialog">
-      <div class="modal-head">
+      <!-- Modal Header -->
+      <div class="modal-header">
         <div class="modal-product-summary">
-          <img id="modalProductImg" src="" alt="Product Thumbnail" />
+          <img src="" alt="" id="modalProductImg" class="modal-img" />
           <div>
-            <h3 id="modalProductTitle">Product Title</h3>
-            <p id="modalProductSubtitle">Specifications</p>
+            <h3 class="modal-title" id="modalProductTitle">Canonical Product</h3>
+            <p class="modal-meta" id="modalProductMeta">Brand • Category • Specs</p>
           </div>
         </div>
-        <button class="modal-close" id="modalCloseBtn" aria-label="Close dialog">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
+        <button class="btn-modal-close" id="btnModalClose" aria-label="Close dialog">✕</button>
       </div>
-      <div class="modal-content-body">
-        <div class="modal-section-title">
-          <span>Verified Marketplace Offers</span>
-          <span class="modal-note">Sorted by price (INR)</span>
+
+      <!-- Modal Body: Seller Quotes -->
+      <div class="modal-body">
+        <div class="modal-body-subheading">
+          <span>Verified Marketplace Offers (Sorted by Lowest Price in INR)</span>
+          <span class="tag-live-deal">Live Price Intelligence</span>
         </div>
-        <div class="seller-offers-list" id="modalSellerList">
-          <!-- Populated by app.js -->
+        <div class="seller-offers-container" id="modalSellerList">
+          <!-- Rendered by app.js -->
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ================================================================
-       FOOTER
-       ================================================================ -->
-  <footer class="app-footer">
-    <div class="footer-container">
-      <div class="footer-left">
-        <span class="footer-brand">ENTITY<span class="brand-dot">.</span>RESOLVE</span>
-        <span class="footer-desc">Product Entity Resolution & Multi-Seller Price Intelligence Platform</span>
-      </div>
-      <div class="footer-nav">
-        <a href="#" onclick="switchTab('catalog'); scrollToCatalog(); return false;">Catalog</a>
-        <a href="#" onclick="switchTab('duplicates'); scrollToCatalog(); return false;">Resolution Clusters</a>
-        <a href="#" onclick="switchTab('matrix'); scrollToCatalog(); return false;">Price Matrix</a>
-        <a href="#" onclick="switchTab('playground'); scrollToCatalog(); return false;">Entity Matcher</a>
-      </div>
-      <div class="footer-copy">
-        © 2026 ENTITY.RESOLVE Platform · INR (₹) Live Pricing
-      </div>
-    </div>
-  </footer>
+  <!-- Toast Notification Container -->
+  <div class="app-toast" id="appToast" role="status" aria-live="polite"></div>
 
-  <!-- Scripts — data.js and app.js untouched -->
+  <!-- Scripts -->
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
-  <script src="js/ui.js"></script>
 </body>
 </html>
